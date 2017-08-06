@@ -1,0 +1,350 @@
+/* 使用CDN的时候不需要在此引入font-awesome */
+/*@import "../static/font-awesome-4.7.0/scss/font-awesome";*/
+@import "_variables";
+
+@mixin Qswitch-size($width, $height, $font-size, $handle-margin) {
+  width: $width;
+  height: $height;
+
+  .Qswitch-label {
+    font-size: $font-size;
+  }
+
+  .Qswitch-handle {
+    width: $height - $handle-margin * 2;
+    height: $height - $handle-margin * 2;
+  }
+
+  .Qswitch-input:checked ~ .Qswitch-handle {
+    left: $width - $height + $handle-margin;
+  }
+}
+
+@mixin Qswitch($type, $width, $height, $font-size, $handle-margin) {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  width: $width;
+  height: $height;
+  background-color: transparent;
+  cursor: pointer;
+
+  .Qswitch-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+  }
+
+  .Qswitch-label {
+    position: relative;
+    display: block;
+    height: inherit;
+    @if $type == icon {
+      font-family: FontAwesome;
+    }
+    font-size: $font-size;
+    font-weight: 600;
+    text-transform: uppercase;
+    @if $type == ddd {
+      background-color: $gray-lightest;
+    } @else {
+      background-color: #fff;
+    }
+    border: 1px solid $border-color;
+    border-radius: 2px;
+    transition: opacity background .15s ease-out;
+  }
+  @if $type == text or $type == icon {
+    .Qswitch-label::before,
+    .Qswitch-label::after {
+      position: absolute;
+      top: 50%;
+      width: 50%;
+      margin-top: -.5em;
+      line-height: 1;
+      text-align: center;
+      transition: inherit;
+    }
+
+    /* fix me */
+    $icon-map: (
+            happy: (on: "\f118", off: "\f11a"),
+            lock: (on: "\f13e", off: "\f023"),
+            check: (on: "\f14a", off: "\f2d3"),
+            check2: (on: "\f046", off: "\f2d4"),
+            check3: (on: "\f058", off: "\f111"),
+            check4: (on: "\f05d", off: "\f10c")
+    );
+
+    .Qswitch-label::before {
+      right: 1px;
+      color: $gray-lighter;
+      @if $type == text {
+        content: attr(data-off);
+      }
+    }
+    @if $type == icon {
+      @each $icon-type, $on-off in $icon-map {
+        .Qswitch-label.#{$icon-type}::before {
+          content: map-get($on-off, "off");
+        }
+      }
+    }
+    .Qswitch-label::after {
+      left: 1px;
+      color: #fff;
+      @if $type == text {
+        content: attr(data-on);
+      }
+      opacity: 0;
+    }
+    @if $type == icon {
+      @each $icon-type, $on-off in $icon-map {
+        .Qswitch-label.#{$icon-type}::after {
+          content: map-get($on-off, "on");
+        }
+      }
+    }
+  }
+
+  .Qswitch-input:checked ~ .Qswitch-label {
+    //background: $gray-lightest;
+  }
+  .Qswitch-input:checked ~ .Qswitch-label::before {
+    opacity: 0;
+  }
+  .Qswitch-input:checked ~ .Qswitch-label::after {
+    opacity: 1;
+  }
+
+  .Qswitch-handle {
+    position: absolute;
+    top: $handle-margin;
+    left: $handle-margin;
+    width: $height - $handle-margin * 2;
+    height: $height - $handle-margin * 2;
+    background: #fff;
+    border: 1px solid $border-color;
+    border-radius: 1px;
+    transition: left .15s ease-out;
+    @if $type == ddd {
+      border: 0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, .3);
+    }
+  }
+
+  .Qswitch-input:checked ~ .Qswitch-handle {
+    left: $width - $height + $handle-margin;
+  }
+
+  @if $type == ddd {
+    @extend .Qswitch-pill;
+  }
+
+  //size variations
+  @if $type == default {
+
+    &.Qswitch-lg {
+      @include Qswitch-size($Qswitch-lg-width, $Qswitch-lg-height, $Qswitch-lg-font-size, $handle-margin);
+    }
+    &.Qswitch-sm {
+      @include Qswitch-size($Qswitch-sm-width, $Qswitch-sm-height, $Qswitch-sm-font-size, $handle-margin);
+    }
+    &.Qswitch-xs {
+      @include Qswitch-size($Qswitch-xs-width, $Qswitch-xs-height, $Qswitch-xs-font-size, $handle-margin);
+    }
+
+  } @else if $type == text {
+
+    &.Qswitch-lg {
+      @include Qswitch-size($Qswitch-text-lg-width, $Qswitch-text-lg-height, $Qswitch-text-lg-font-size, $handle-margin);
+    }
+    &.Qswitch-sm {
+      @include Qswitch-size($Qswitch-text-sm-width, $Qswitch-text-sm-height, $Qswitch-text-sm-font-size, $handle-margin);
+    }
+    &.Qswitch-xs {
+      @include Qswitch-size($Qswitch-text-xs-width, $Qswitch-text-xs-height, $Qswitch-text-xs-font-size, $handle-margin);
+    }
+
+  } @else if $type == icon {
+
+    &.Qswitch-lg {
+      @include Qswitch-size($Qswitch-icon-lg-width, $Qswitch-icon-lg-height, $Qswitch-icon-lg-font-size, $handle-margin);
+    }
+    &.Qswitch-sm {
+      @include Qswitch-size($Qswitch-icon-sm-width, $Qswitch-icon-sm-height, $Qswitch-icon-sm-font-size, $handle-margin);
+    }
+    &.Qswitch-xs {
+      @include Qswitch-size($Qswitch-icon-xs-width, $Qswitch-icon-xs-height, $Qswitch-icon-xs-font-size, $handle-margin);
+    }
+
+  } @else if $type == ddd {
+
+    &.Qswitch-lg {
+      @include Qswitch-size($Qswitch-lg-width, $Qswitch-lg-height, $Qswitch-lg-font-size, 0);
+    }
+    &.Qswitch-sm {
+      @include Qswitch-size($Qswitch-sm-width, $Qswitch-sm-height, $Qswitch-sm-font-size, 0);
+    }
+    &.Qswitch-xs {
+      @include Qswitch-size($Qswitch-xs-width, $Qswitch-xs-height, $Qswitch-xs-font-size, 0);
+    }
+  }
+}
+
+@mixin Qswitch-variant($color) {
+  > .Qswitch-input:checked ~ .Qswitch-label {
+    background: $color !important;
+    border-color: darken($color, 10%);
+  }
+
+  > .Qswitch-input:checked ~ .Qswitch-handle {
+    border-color: darken($color, 10%);
+  }
+}
+
+@mixin Qswitch-outline-variant($color) {
+  > .Qswitch-input:checked ~ .Qswitch-label {
+    background: #fff !important;
+    border-color: $color;
+
+    &::after {
+      color: $color;
+    }
+  }
+
+  > .Qswitch-input:checked ~ .Qswitch-handle {
+    border-color: $color;
+  }
+}
+
+@mixin Qswitch-outline-alt-variant($color) {
+  > .Qswitch-input:checked ~ .Qswitch-label {
+    background: #fff !important;
+    border-color: $color;
+
+    &::after {
+      color: $color;
+    }
+  }
+
+  > .Qswitch-input:checked ~ .Qswitch-handle {
+    background: $color !important;
+    border-color: $color;
+  }
+}
+
+$Qswitch-lg-width: 48px;
+$Qswitch-lg-height: 28px;
+$Qswitch-lg-font-size: 12px;
+
+$Qswitch-width: 40px;
+$Qswitch-height: 24px;
+$Qswitch-font-size: 10px;
+
+$handle-margin: 3px;
+
+$Qswitch-sm-width: 32px;
+$Qswitch-sm-height: 20px;
+$Qswitch-sm-font-size: 8px;
+
+$Qswitch-xs-width: 24px;
+$Qswitch-xs-height: 16px;
+$Qswitch-xs-font-size: 7px;
+
+$Qswitch-text-lg-width: 56px;
+$Qswitch-text-lg-height: 28px;
+$Qswitch-text-lg-font-size: 12px;
+
+$Qswitch-text-width: 48px;
+$Qswitch-text-height: 24px;
+$Qswitch-text-font-size: 10px;
+
+$Qswitch-text-sm-width: 40px;
+$Qswitch-text-sm-height: 20px;
+$Qswitch-text-sm-font-size: 8px;
+
+$Qswitch-text-xs-width: 32px;
+$Qswitch-text-xs-height: 16px;
+$Qswitch-text-xs-font-size: 7px;
+
+$Qswitch-icon-lg-width: 56px;
+$Qswitch-icon-lg-height: 28px;
+$Qswitch-icon-lg-font-size: 24px;
+
+$Qswitch-icon-width: 48px;
+$Qswitch-icon-height: 24px;
+$Qswitch-icon-font-size: 20px;
+
+$Qswitch-icon-sm-width: 40px;
+$Qswitch-icon-sm-height: 20px;
+$Qswitch-icon-sm-font-size: 16px;
+
+$Qswitch-icon-xs-width: 32px;
+$Qswitch-icon-xs-height: 16px;
+$Qswitch-icon-xs-font-size: 12px;
+
+.Qswitch.Qswitch-default {
+  @include Qswitch('default', $Qswitch-width, $Qswitch-height, $Qswitch-font-size, $handle-margin);
+}
+
+.Qswitch.Qswitch-text {
+  @include Qswitch('text', $Qswitch-text-width, $Qswitch-text-height, $Qswitch-text-font-size, $handle-margin);
+}
+
+.Qswitch.Qswitch-icon {
+  @include Qswitch('icon', $Qswitch-icon-width, $Qswitch-icon-height, $Qswitch-icon-font-size, $handle-margin);
+}
+
+.Qswitch.Qswitch-ddd {
+  @include Qswitch('ddd', $Qswitch-width, $Qswitch-height, $Qswitch-font-size, 0);
+}
+
+//pills style
+.Qswitch-pill {
+  .Qswitch-label,
+  .Qswitch-handle {
+    border-radius: 50em !important;
+  }
+
+  .Qswitch-label::before {
+    right: 2px !important;
+  }
+  .Qswitch-label::after {
+    left: 2px !important;
+  }
+}
+
+@each $variant, $color in (
+  /* Qswitch-white: $brand-white,*/ //弃用白色
+        Qswitch-black: $brand-black,
+        Qswitch-aqua: $brand-aqua,
+        Qswitch-blue: $brand-blue,
+        Qswitch-fuchsia: $brand-fuchsia,
+        Qswitch-green: $brand-green,
+        Qswitch-lime: $brand-lime,
+        Qswitch-maroon: $brand-maroon,
+        Qswitch-navy: $brand-navy,
+        Qswitch-olive: $brand-olive,
+        Qswitch-orange: $brand-orange,
+        Qswitch-purple: $brand-purple,
+        Qswitch-red: $brand-red,
+        Qswitch-silver: $brand-silver,
+        Qswitch-gray: $brand-gray,
+        Qswitch-teal: $brand-teal,
+        Qswitch-yellow: $brand-yellow
+) {
+  //normal style
+  .#{$variant} {
+    @include Qswitch-variant($color);
+  }
+  //outline style
+  .#{$variant}-outline {
+    @include Qswitch-outline-variant($color);
+  }
+  //outline alternative style
+  .#{$variant}-outline-alt {
+    @include Qswitch-outline-alt-variant($color);
+  }
+}
