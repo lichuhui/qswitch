@@ -48,7 +48,7 @@ Vue.use(Qwsitch)
 
 ![Alt text](./src/static/Qswitch-Screenshot.png)
 
-[Demo.（请看实际例子。）](./src/static/example/demo.html "Demo.（请看实际例子。）")
+[Demo.（请看实际例子。）](https://github.com/lichuhui/qswitch/index.html "Demo.（请看实际例子。）")
 
 > [font awesome](http://fontawesome.io/icons/ "font awesome") is required in order to dispaly icon for Qswitch.（需要 [font awesome](http://fontawesome.io/icons/ "font awesome")才能显示Qswitch的图标。）
 
